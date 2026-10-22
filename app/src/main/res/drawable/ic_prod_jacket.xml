@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Denim Jacket Main Body -->
+    <path
+        android:pathData="M30,30 L45,25 L60,35 L75,25 L90,30 L102,55 L88,58 L85,95 L35,95 L32,58 L18,55 Z"
+        android:fillColor="#FF2A385E" />
+    <!-- Collar & Zip Seam -->
+    <path
+        android:pathData="M60,35 L60,95 M45,25 L60,50 L75,25"
+        android:strokeWidth="3"
+        android:strokeColor="#FFD4A373" />
+    <!-- Chest Pockets -->
+    <path
+        android:pathData="M38,48 L52,48 L52,58 L38,58 Z M68,48 L82,48 L82,58 L68,58 Z"
+        android:fillColor="#FF1B3B50" />
+</vector>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Serum Dropper Bottle -->
+    <path
+        android:pathData="M45,45 L75,45 L75,95 A10,10 0 0,1 65,105 L55,105 A10,10 0 0,1 45,95 Z"
+        android:fillColor="#FFD0108A" />
+    <!-- Dropper Cap -->
+    <path
+        android:pathData="M52,20 L68,20 L68,35 L52,35 Z"
+        android:fillColor="#FF0B132B" />
+    <path
+        android:pathData="M56,12 L64,12 L64,20 L56,20 Z"
+        android:fillColor="#FFE63946" />
+    <!-- Label Stripe -->
+    <path
+        android:pathData="M45,60 L75,60 L75,80 L45,80 Z"
+        android:fillColor="#FFFFFFFF" />
+</vector>

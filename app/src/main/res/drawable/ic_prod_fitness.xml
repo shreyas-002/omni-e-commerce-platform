@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Rolled Yoga Mat -->
+    <path
+        android:pathData="M30,40 L90,40 C95,40 100,50 95,60 L35,60 C30,60 25,50 30,40 Z"
+        android:fillColor="#FF588157" />
+    <path
+        android:pathData="M30,40 A10,10 0 1,1 30,60 A10,10 0 1,1 30,40 Z"
+        android:fillColor="#FF3A5A40" />
+    <!-- Resistance Band Loop -->
+    <path
+        android:pathData="M20,75 L100,75 C105,75 105,85 100,85 L20,85 C15,85 15,75 20,75 Z"
+        android:fillColor="#FFE63946" />
+</vector>

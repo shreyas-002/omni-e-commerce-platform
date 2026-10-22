@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Midnight Background Card -->
+    <path
+        android:pathData="M30,0 L170,0 A30,30 0,0,1 200,30 L200,170 A30,30 0,0,1 170,200 L30,200 A30,30 0,0,1 0,170 L0,30 A30,30 0,0,1 30,0 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="0"
+                android:startY="0"
+                android:endX="200"
+                android:endY="200"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FF080E1E" />
+                <item android:offset="1.0" android:color="#FF101B36" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Outer Sweeping 3D 'O' Ring -->
+    <path
+        android:pathData="M100,25 C138.66,25 170,56.34 170,95 C170,133.66 138.66,165 100,165 C61.34,165 30,133.66 30,95 C30,56.34 61.34,25 100,25 Z M100,48 C74.04,48 53,69.04 53,95 C53,120.96 74.04,142 100,142 C125.96,142 147,120.96 147,95 C147,69.04 125.96,48 100,48 Z"
+        android:fillType="evenOdd">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="20"
+                android:startY="20"
+                android:endX="180"
+                android:endY="180"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FFFF5252" />
+                <item android:offset="0.35" android:color="#FFFF7A00" />
+                <item android:offset="0.70" android:color="#FFD0108A" />
+                <item android:offset="1.0" android:color="#FF0072FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Shopping Cart Speed Lines -->
+    <path
+        android:pathData="M62,82 L78,82 M58,92 L72,92 M64,102 L76,102"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFF7A00" />
+
+    <!-- Shopping Cart Body -->
+    <path
+        android:pathData="M78,80 L132,80 L122,110 L90,110 Z"
+        android:strokeWidth="2">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="78"
+                android:startY="80"
+                android:endX="132"
+                android:endY="110"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FFFF5252" />
+                <item android:offset="0.5" android:color="#FFD0108A" />
+                <item android:offset="1.0" android:color="#FF0072FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Shopping Cart Handle -->
+    <path
+        android:pathData="M132,80 L140,70"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeColor="#FF00B4D8" />
+
+    <!-- Shopping Cart Wheels -->
+    <path
+        android:pathData="M94,120 A5,5 0 1,1 94,119.9 Z"
+        android:fillColor="#FF00B4D8" />
+    <path
+        android:pathData="M118,120 A5,5 0 1,1 118,119.9 Z"
+        android:fillColor="#FF00B4D8" />
+
+    <!-- Glow Sparkle Dots -->
+    <path
+        android:pathData="M148,45 A3,3 0 1,1 148,44.9 Z"
+        android:fillColor="#FFFFFFFF" />
+    <path
+        android:pathData="M52,145 A2.5,2.5 0 1,1 52,144.9 Z"
+        android:fillColor="#FFFFFFFF" />
+</vector>

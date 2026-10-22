@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Gaming Keyboard Base -->
+    <path
+        android:pathData="M15,40 L105,40 A5,5 0 0,1 110,45 L110,80 A5,5 0 0,1 105,85 L15,85 A5,5 0 0,1 10,80 L10,45 A5,5 0 0,1 15,40 Z"
+        android:fillColor="#FF0B132B" />
+    <!-- Key Rows RGB Strip -->
+    <path
+        android:pathData="M20,48 L100,48 M20,58 L100,58 M20,68 L100,68"
+        android:strokeWidth="3"
+        android:strokeColor="#FF3A86EF" />
+    <!-- Spacebar Accent Key -->
+    <path
+        android:pathData="M40,74 L80,74"
+        android:strokeWidth="5"
+        android:strokeColor="#FFE63946"
+        android:strokeLineCap="round" />
+</vector>

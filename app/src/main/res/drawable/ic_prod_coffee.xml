@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Espresso Machine Body -->
+    <path
+        android:pathData="M35,20 L85,25 L85,95 L35,95 Z"
+        android:fillColor="#FF6B705C" />
+    <!-- Top Filter Head -->
+    <path
+        android:pathData="M25,35 L95,35 L90,45 L30,45 Z"
+        android:fillColor="#FF2B2D42" />
+    <!-- Coffee Glass Cup -->
+    <path
+        android:pathData="M48,68 L72,68 L68,90 L52,90 Z"
+        android:fillColor="#FFD4A373" />
+    <!-- Drip Streams -->
+    <path
+        android:pathData="M54,45 L54,68 M66,45 L66,68"
+        android:strokeWidth="3"
+        android:strokeColor="#FF3D2612" />
+</vector>

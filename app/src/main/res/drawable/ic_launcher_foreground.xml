@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Launcher Center Logo Mark -->
+    <!-- Sweeping 3D Gradient Ring -->
+    <path
+        android:pathData="M54,28 C70,28 80,44 80,56 C80,68 70,84 54,84 C38,84 28,68 28,56 C28,44 38,28 54,28 Z M54,38 C43,38 38,47 38,56 C38,65 43,74 54,74 C65,74 70,65 70,56 C70,47 65,38 54,38 Z"
+        android:fillType="evenOdd">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="28"
+                android:startY="28"
+                android:endX="80"
+                android:endY="84"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FFFF5252" />
+                <item android:offset="0.4" android:color="#FFD0108A" />
+                <item android:offset="1.0" android:color="#FF0072FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Speed Lines -->
+    <path
+        android:pathData="M38,50 L46,50 M35,56 L44,56 M38,62 L45,62"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFFF7A00" />
+
+    <!-- Shopping Cart Body -->
+    <path
+        android:pathData="M46,48 L70,48 L65,65 L52,65 Z"
+        android:strokeWidth="1">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="46"
+                android:startY="48"
+                android:endX="70"
+                android:endY="65"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FFFF5252" />
+                <item android:offset="1.0" android:color="#FF0072FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Wheels -->
+    <path
+        android:pathData="M54,71 A3,3 0 1,1 54,70.9 Z"
+        android:fillColor="#FF00B4D8" />
+    <path
+        android:pathData="M64,71 A3,3 0 1,1 64,70.9 Z"
+        android:fillColor="#FF00B4D8" />
+</vector>

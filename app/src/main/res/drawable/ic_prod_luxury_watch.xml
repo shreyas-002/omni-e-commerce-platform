@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Stainless Steel Link Bracelet -->
+    <path
+        android:pathData="M48,10 L72,10 L72,110 L48,110 Z"
+        android:fillColor="#FF8D99AE" />
+    <!-- Outer Bezel Ring -->
+    <path
+        android:pathData="M60,60 A28,28 0 1,1 60,59.9 Z"
+        android:fillColor="#FF2B2D42"
+        android:strokeWidth="4"
+        android:strokeColor="#FFD4A373" />
+    <!-- Inner Watch Dial -->
+    <path
+        android:pathData="M60,60 A20,28 0 1,1 60,59.9 Z"
+        android:fillColor="#FF0B132B" />
+    <!-- Watch Hands -->
+    <path
+        android:pathData="M60,60 L60,44 M60,60 L72,60"
+        android:strokeWidth="3"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+</vector>

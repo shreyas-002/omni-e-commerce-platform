@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Watch Straps -->
+    <path
+        android:pathData="M48,15 L72,15 L72,105 L48,105 Z"
+        android:fillColor="#FF708090" />
+    <!-- Watch Case -->
+    <path
+        android:pathData="M38,38 L82,38 A8,8 0 0,1 90,46 L90,74 A8,8 0 0,1 82,82 L38,82 A8,8 0 0,1 30,74 L30,46 A8,8 0 0,1 38,38 Z"
+        android:fillColor="#FF0B132B" />
+    <!-- Screen Glass Display -->
+    <path
+        android:pathData="M34,42 L86,42 L86,78 L34,78 Z"
+        android:fillColor="#FF1C2541" />
+    <!-- Digital Time Graphic -->
+    <path
+        android:pathData="M46,60 L54,60 M66,60 L74,60"
+        android:strokeWidth="4"
+        android:strokeColor="#FF2EC4B6"
+        android:strokeLineCap="round" />
+    <!-- Heart Ring -->
+    <path
+        android:pathData="M60,52 A4,4 0 1,1 60,51.9 Z"
+        android:fillColor="#FFE63946" />
+</vector>

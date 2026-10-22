@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Sneaker Upper Shape -->
+    <path
+        android:pathData="M20,70 L25,45 L45,40 L65,55 L100,60 L102,78 L20,78 Z"
+        android:fillColor="#FFE01E5A" />
+    <!-- White Cushioned Sole -->
+    <path
+        android:pathData="M18,78 L104,78 L102,90 L16,90 Z"
+        android:fillColor="#FFFFFFFF" />
+    <!-- Swoosh Stripe Accent -->
+    <path
+        android:pathData="M35,68 C55,52 80,62 92,62"
+        android:strokeWidth="5"
+        android:strokeColor="#FF0B132B"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <!-- Laces -->
+    <path
+        android:pathData="M48,46 L58,54 M52,42 L62,50"
+        android:strokeWidth="3"
+        android:strokeColor="#FFFFFFFF" />
+</vector>

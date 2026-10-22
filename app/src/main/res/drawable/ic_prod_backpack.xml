@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Backpack Main Compartment -->
+    <path
+        android:pathData="M35,35 C35,20 85,20 85,35 L90,95 L30,95 Z"
+        android:fillColor="#FF2B2D42" />
+    <!-- Front Zipper Pocket -->
+    <path
+        android:pathData="M40,60 L80,60 A5,5 0 0,1 85,65 L85,90 L35,90 L35,65 A5,5 0 0,1 40,60 Z"
+        android:fillColor="#FF1B3B50" />
+    <!-- Top Carry Handle -->
+    <path
+        android:pathData="M50,22 C50,15 70,15 70,22"
+        android:strokeWidth="4"
+        android:strokeColor="#FFE63946"
+        android:fillColor="#00000000" />
+</vector>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <!-- Speaker Cylindrical Body -->
+    <path
+        android:pathData="M40,30 L80,30 A10,10 0 0,1 90,40 L90,85 A10,10 0 0,1 80,95 L40,95 A10,10 0 0,1 30,85 L30,40 A10,10 0 0,1 40,30 Z"
+        android:fillColor="#FF1B3B50" />
+    <!-- Main Driver Circle -->
+    <path
+        android:pathData="M60,62.5 A16,16 0 1,1 60,62.4 Z"
+        android:fillColor="#FF2A385E"
+        android:strokeWidth="3"
+        android:strokeColor="#FFE63946" />
+    <!-- Inner Cone -->
+    <path
+        android:pathData="M60,62.5 A7,7 0 1,1 60,62.4 Z"
+        android:fillColor="#FFD4A373" />
+    <!-- Top Control Bar -->
+    <path
+        android:pathData="M42,38 L78,38"
+        android:strokeWidth="4"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+</vector>
