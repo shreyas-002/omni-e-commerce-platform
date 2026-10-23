@@ -1,129 +1,336 @@
 package com.example.omnie_commerceplatform
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.omnie_commerceplatform.adapters.CartAdapter
+import com.example.omnie_commerceplatform.adapters.CategoryAdapter
+import com.example.omnie_commerceplatform.adapters.OrderAdapter
+import com.example.omnie_commerceplatform.adapters.ProductAdapter
+import com.example.omnie_commerceplatform.adapters.RecommendedAdapter
+import com.example.omnie_commerceplatform.data.DeliveryAddress
+import com.example.omnie_commerceplatform.data.OmniData
+import com.example.omnie_commerceplatform.data.PincodeLookup
+import com.example.omnie_commerceplatform.databinding.ActivityMainBinding
+import com.example.omnie_commerceplatform.databinding.DialogCheckoutBinding
+import com.example.omnie_commerceplatform.databinding.FragmentCartBinding
+import com.example.omnie_commerceplatform.databinding.FragmentHomeBinding
+import com.example.omnie_commerceplatform.databinding.FragmentProfileBinding
+import com.example.omnie_commerceplatform.databinding.FragmentSignInBinding
+import com.example.omnie_commerceplatform.databinding.FragmentSplashBinding
 import com.example.omnie_commerceplatform.ui.OmniViewModel
-import com.example.omnie_commerceplatform.ui.components.CartBottomSheet
-import com.example.omnie_commerceplatform.ui.screens.CheckoutModalSheet
-import com.example.omnie_commerceplatform.ui.screens.HomeScreen
-import com.example.omnie_commerceplatform.ui.screens.SignInScreen
-import com.example.omnie_commerceplatform.ui.screens.SplashScreen
-import com.example.omnie_commerceplatform.ui.theme.OmniTheme
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
 
     private val viewModel: OmniViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
+
+    private var currentTab = R.id.nav_home
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
-        setContent {
-            OmniTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    var showSplash by remember { mutableStateOf(true) }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-                    if (showSplash) {
-                        SplashScreen(
-                            onSplashFinished = { showSplash = false }
-                        )
-                    } else {
-                        val authState by viewModel.authUiState.collectAsState()
-                        val shopState by viewModel.shopUiState.collectAsState()
-                        val products by viewModel.filteredProductsFlow.collectAsState()
-                        val userProfile by viewModel.userProfileFlow.collectAsState()
-                        val ordersList by viewModel.ordersListFlow.collectAsState()
+        setupBottomNavigation()
+        showSplashScreen()
+    }
 
-                        val cartSheetState = rememberModalBottomSheetState()
-                        val checkoutSheetState = rememberModalBottomSheetState()
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            currentTab = item.itemId
+            when (item.itemId) {
+                R.id.nav_home, R.id.nav_explore -> showHomeScreen()
+                R.id.nav_cart -> showCartScreen()
+                R.id.nav_profile -> showProfileScreen()
+            }
+            true
+        }
+    }
 
-                        AnimatedContent(
-                            targetState = authState.isLoggedIn,
-                            transitionSpec = { fadeIn() togetherWith fadeOut() },
-                            label = "MainScreenTransition"
-                        ) { loggedIn ->
-                            if (!loggedIn) {
-                                SignInScreen(
-                                    uiState = authState,
-                                    onToggleAuthMode = viewModel::toggleAuthMode,
-                                    onFullNameChange = viewModel::onFullNameChange,
-                                    onEmailChange = viewModel::onEmailChange,
-                                    onPasswordChange = viewModel::onPasswordChange,
-                                    onPhoneChange = viewModel::onPhoneChange,
-                                    onStreetChange = viewModel::onStreetChange,
-                                    onPincodeChange = viewModel::onPincodeChange,
-                                    onCityChange = viewModel::onCityChange,
-                                    onStateChange = viewModel::onStateChange,
-                                    onTogglePasswordVisibility = viewModel::togglePasswordVisibility,
-                                    onToggleRememberMe = viewModel::toggleRememberMe,
-                                    onSelectDemoAccount = viewModel::selectDemoAccount,
-                                    onSignIn = viewModel::signIn
-                                )
-                            } else {
-                                HomeScreen(
-                                    shopState = shopState,
-                                    products = products,
-                                    userProfile = userProfile,
-                                    orders = ordersList,
-                                    onCategorySelected = viewModel::onCategorySelected,
-                                    onSearchQueryChanged = viewModel::onSearchQueryChanged,
-                                    onResetFilters = viewModel::resetFilters,
-                                    onAddToCart = viewModel::addToCart,
-                                    onQuantityChange = viewModel::updateCartQuantity,
-                                    onOpenCart = { viewModel.toggleCartOpen(isOpen = true) },
-                                    onOpenCheckout = { viewModel.toggleCheckoutOpen(isOpen = true) },
-                                    onSignOut = viewModel::signOut
-                                )
-                            }
-                        }
+    private fun showSplashScreen() {
+        binding.bottomNavigation.visibility = View.GONE
+        val splashBinding = FragmentSplashBinding.inflate(layoutInflater)
+        binding.fragmentContainer.removeAllViews()
+        binding.fragmentContainer.addView(splashBinding.root)
 
-                        if (shopState.isCartOpen) {
-                            CartBottomSheet(
-                                sheetState = cartSheetState,
-                                cartItems = shopState.cartItems,
-                                onDismiss = { viewModel.toggleCartOpen(false) },
-                                onQuantityChange = viewModel::updateCartQuantity,
-                                onClearCart = viewModel::clearCart,
-                                onCheckout = {
-                                    viewModel.toggleCartOpen(false)
-                                    viewModel.toggleCheckoutOpen(true)
-                                }
-                            )
-                        }
+        splashBinding.root.postDelayed({
+            observeAuthState()
+        }, 1200)
+    }
 
-                        if (shopState.isCheckoutOpen) {
-                            CheckoutModalSheet(
-                                sheetState = checkoutSheetState,
-                                cartItems = shopState.cartItems,
-                                userPhone = userProfile.phone,
-                                userAddress = userProfile.address,
-                                onDismiss = { viewModel.toggleCheckoutOpen(false) },
-                                onPlaceOrder = { address, phone, paymentMethod ->
-                                    viewModel.placeOrder(address, phone, paymentMethod)
-                                }
-                            )
+    private fun observeAuthState() {
+        lifecycleScope.launch {
+            viewModel.authUiState.collectLatest { authState ->
+                if (!authState.isLoggedIn) {
+                    binding.bottomNavigation.visibility = View.GONE
+                    showSignInScreen()
+                } else {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.bottomNavigation.selectedItemId = R.id.nav_home
+                    showHomeScreen()
+                }
+            }
+        }
+    }
+
+    private fun showSignInScreen() {
+        val signInBinding = FragmentSignInBinding.inflate(layoutInflater)
+        binding.fragmentContainer.removeAllViews()
+        binding.fragmentContainer.addView(signInBinding.root)
+
+        val authState = viewModel.authUiState.value
+
+        signInBinding.apply {
+            btnToggleAuth.text = if (authState.isSignUpMode) "Sign In instead" else "Create Account"
+            tvAuthTitle.text = if (authState.isSignUpMode) "Join Omni Store" else "Sign in to Omni"
+            btnSubmitAuth.text = if (authState.isSignUpMode) "Register & Open Store" else "Sign in"
+
+            val signUpVis = if (authState.isSignUpMode) View.VISIBLE else View.GONE
+            etFullName.visibility = signUpVis
+            etPhone.visibility = signUpVis
+            etStreet.visibility = signUpVis
+            etPincode.visibility = signUpVis
+            layoutCityState.visibility = signUpVis
+
+            btnToggleAuth.setOnClickListener {
+                viewModel.toggleAuthMode()
+                showSignInScreen()
+            }
+
+            etPincode.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val pin = s.toString().trim()
+                    if (pin.length >= 2) {
+                        val loc = PincodeLookup.lookupLocation(pin)
+                        if (loc != null) {
+                            etCity.setText(loc.city)
+                            etState.setText(loc.state)
                         }
                     }
                 }
+                override fun afterTextChanged(s: Editable?) {}
+            })
+
+            btnSubmitAuth.setOnClickListener {
+                viewModel.onEmailChange(etEmail.text.toString())
+                viewModel.onPasswordChange(etPassword.text.toString())
+                if (authState.isSignUpMode) {
+                    viewModel.onFullNameChange(etFullName.text.toString())
+                    viewModel.onPhoneChange(etPhone.text.toString())
+                    viewModel.onStreetChange(etStreet.text.toString())
+                    viewModel.onPincodeChange(etPincode.text.toString())
+                    viewModel.onCityChange(etCity.text.toString())
+                    viewModel.onStateChange(etState.text.toString())
+                }
+                viewModel.signIn()
             }
+        }
+    }
+
+    private fun showHomeScreen() {
+        val homeBinding = FragmentHomeBinding.inflate(layoutInflater)
+        binding.fragmentContainer.removeAllViews()
+        binding.fragmentContainer.addView(homeBinding.root)
+
+        val categoryAdapter = CategoryAdapter(
+            categories = OmniData.categories,
+            selectedCategory = viewModel.shopUiState.value.selectedCategory,
+            onCategorySelected = { cat ->
+                viewModel.onCategorySelected(cat)
+            }
+        )
+
+        val productAdapter = ProductAdapter(
+            products = viewModel.filteredProductsFlow.value,
+            onAddToCart = { product ->
+                viewModel.addToCart(product)
+                Toast.makeText(this, "Added ${product.title} to Cart!", Toast.LENGTH_SHORT).show()
+                updateCartBadge()
+            }
+        )
+
+        homeBinding.rvCategories.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        homeBinding.rvCategories.adapter = categoryAdapter
+
+        homeBinding.rvProducts.layoutManager = GridLayoutManager(this, 2)
+        homeBinding.rvProducts.adapter = productAdapter
+
+        lifecycleScope.launch {
+            viewModel.filteredProductsFlow.collectLatest { list ->
+                productAdapter.submitList(list)
+            }
+        }
+
+        homeBinding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.onSearchQueryChanged(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        updateCartBadge()
+    }
+
+    private fun showCartScreen() {
+        val cartBinding = FragmentCartBinding.inflate(layoutInflater)
+        binding.fragmentContainer.removeAllViews()
+        binding.fragmentContainer.addView(cartBinding.root)
+
+        val shopState = viewModel.shopUiState.value
+        val totalPrice = shopState.cartItems.sumOf { it.product.priceInRupees * it.quantity }
+
+        cartBinding.tvCartMrp.text = "₹${String.format(Locale.US, "%,d", totalPrice)}"
+        cartBinding.tvCartTotalPayable.text = "₹${String.format(Locale.US, "%,d", totalPrice)}"
+
+        val cartAdapter = CartAdapter(
+            items = shopState.cartItems,
+            onQuantityChange = { productId, delta ->
+                viewModel.updateCartQuantity(productId, delta)
+                showCartScreen()
+                updateCartBadge()
+            }
+        )
+
+        val recommendedProducts = OmniData.products.filter { rec ->
+            shopState.cartItems.none { it.product.id == rec.id }
+        }
+
+        val recAdapter = RecommendedAdapter(
+            products = recommendedProducts,
+            onAddToCart = { rec ->
+                viewModel.addToCart(rec)
+                showCartScreen()
+                updateCartBadge()
+            }
+        )
+
+        cartBinding.rvCartItems.layoutManager = LinearLayoutManager(this)
+        cartBinding.rvCartItems.adapter = cartAdapter
+
+        cartBinding.rvRecommended.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        cartBinding.rvRecommended.adapter = recAdapter
+
+        cartBinding.btnProceedCheckout.setOnClickListener {
+            showCheckoutDialog()
+        }
+    }
+
+    private fun showProfileScreen() {
+        val profileBinding = FragmentProfileBinding.inflate(layoutInflater)
+        binding.fragmentContainer.removeAllViews()
+        binding.fragmentContainer.addView(profileBinding.root)
+
+        val profile = viewModel.userProfileFlow.value
+        val orders = viewModel.ordersListFlow.value
+
+        profileBinding.apply {
+            tvProfileName.text = profile.fullName.ifBlank { "Omni Customer" }
+            tvProfileEmail.text = profile.email
+            tvProfilePhone.text = profile.phone
+            tvProfileAddress.text = profile.address.formattedAddress()
+
+            val orderAdapter = OrderAdapter(orders)
+            rvOrders.layoutManager = LinearLayoutManager(this@MainActivity)
+            rvOrders.adapter = orderAdapter
+
+            btnSignOut.setOnClickListener {
+                viewModel.signOut()
+            }
+        }
+    }
+
+    private fun showCheckoutDialog() {
+        val dialog = BottomSheetDialog(this)
+        val dialogBinding = DialogCheckoutBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        val userProfile = viewModel.userProfileFlow.value
+
+        dialogBinding.apply {
+            etCheckoutName.setText(userProfile.fullName)
+            etCheckoutPhone.setText(userProfile.phone)
+            etCheckoutPincode.setText(userProfile.address.pincode)
+            etCheckoutStreet.setText(userProfile.address.street)
+            etCheckoutCity.setText(userProfile.address.city)
+            etCheckoutState.setText(userProfile.address.state)
+
+            etCheckoutPincode.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val pin = s.toString().trim()
+                    if (pin.length >= 2) {
+                        val loc = PincodeLookup.lookupLocation(pin)
+                        if (loc != null) {
+                            etCheckoutCity.setText(loc.city)
+                            etCheckoutState.setText(loc.state)
+                        }
+                    }
+                }
+                override fun afterTextChanged(s: Editable?) {}
+            })
+
+            btnToPayment.setOnClickListener {
+                layoutStepAddress.visibility = View.GONE
+                layoutStepPayment.visibility = View.VISIBLE
+                tvCheckoutStepTitle.text = "Select Payment Method"
+            }
+
+            btnConfirmOrder.setOnClickListener {
+                val addr = DeliveryAddress(
+                    street = etCheckoutStreet.text.toString(),
+                    city = etCheckoutCity.text.toString(),
+                    state = etCheckoutState.text.toString(),
+                    pincode = etCheckoutPincode.text.toString()
+                )
+                val payment = when (rgPayment.checkedRadioButtonId) {
+                    R.id.rbCard -> "Credit / Debit Card"
+                    R.id.rbCod -> "Cash on Delivery (COD)"
+                    else -> "UPI (Google Pay / PhonePe)"
+                }
+
+                val placedOrder = viewModel.placeOrder(addr, etCheckoutPhone.text.toString(), payment)
+
+                layoutStepPayment.visibility = View.GONE
+                layoutStepSuccess.visibility = View.VISIBLE
+                tvCheckoutStepTitle.text = "Order Confirmed!"
+                tvReceiptOrderId.text = "Order ID: ${placedOrder.orderId}"
+
+                updateCartBadge()
+            }
+
+            btnCloseReceipt.setOnClickListener {
+                dialog.dismiss()
+                binding.bottomNavigation.selectedItemId = R.id.nav_profile
+                showProfileScreen()
+            }
+        }
+
+        dialog.show()
+    }
+
+    private fun updateCartBadge() {
+        val cartCount = viewModel.shopUiState.value.cartItems.sumOf { it.quantity }
+        val badge = binding.bottomNavigation.getOrCreateBadge(R.id.nav_cart)
+        if (cartCount > 0) {
+            badge.isVisible = true
+            badge.number = cartCount
+        } else {
+            badge.isVisible = false
         }
     }
 }

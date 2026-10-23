@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B132B"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/imgSplashLogo"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:contentDescription="Omni Logo"
+        android:src="@drawable/ic_omni_logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:letterSpacing="0.1"
+        android:text="OMNI"
+        android:textColor="#FFFFFF"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:letterSpacing="0.2"
+        android:text="E - C O M M E R C E"
+        android:textColor="#E63946"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+</LinearLayout>
