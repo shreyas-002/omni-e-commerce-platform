@@ -40,8 +40,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
-                android:hint="Phone Number *"
-                android:inputType="phone" />
+                android:hint="Phone Number (10 digits) *"
+                android:inputType="phone"
+                android:maxLength="10" />
 
             <EditText
                 android:id="@+id/etCheckoutPincode"

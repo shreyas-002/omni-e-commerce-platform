@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="12dp"
-                    android:hint="Full Name"
+                    android:hint="Full Name *"
                     android:inputType="textPersonName"
                     android:visibility="gone" />
 
@@ -72,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="12dp"
-                    android:hint="Email address"
+                    android:hint="Email Address *"
                     android:inputType="textEmailAddress" />
 
                 <EditText
@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="12dp"
-                    android:hint="Password"
+                    android:hint="Password *"
                     android:inputType="textPassword" />
 
                 <EditText
@@ -88,8 +88,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="12dp"
-                    android:hint="Phone Number (+91)"
+                    android:hint="Phone Number (10 digits) *"
                     android:inputType="phone"
+                    android:maxLength="10"
                     android:visibility="gone" />
 
                 <EditText
@@ -97,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="12dp"
-                    android:hint="Delivery Street Address"
+                    android:hint="Delivery Street Address *"
                     android:inputType="textPostalAddress"
                     android:visibility="gone" />
 
@@ -106,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="12dp"
-                    android:hint="PIN Code"
+                    android:hint="PIN Code (6 digits) *"
                     android:inputType="number"
                     android:maxLength="6"
                     android:visibility="gone" />
@@ -124,14 +125,14 @@
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:layout_weight="1"
-                        android:hint="City" />
+                        android:hint="City *" />
 
                     <EditText
                         android:id="@+id/etState"
                         android:layout_width="0dp"
                         android:layout_height="48dp"
                         android:layout_weight="1"
-                        android:hint="State" />
+                        android:hint="State *" />
                 </LinearLayout>
 
                 <Button

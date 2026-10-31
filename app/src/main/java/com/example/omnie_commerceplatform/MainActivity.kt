@@ -176,6 +176,26 @@ class MainActivity : ComponentActivity() {
                         etFullName.error = "Full Name is required"
                         return@setOnClickListener
                     }
+                    if (phone.length != 10) {
+                        etPhone.error = "Enter a valid 10-digit phone number"
+                        return@setOnClickListener
+                    }
+                    if (street.isBlank()) {
+                        etStreet.error = "Delivery street address is required"
+                        return@setOnClickListener
+                    }
+                    if (pincode.length != 6) {
+                        etPincode.error = "PIN Code must be exactly 6 digits"
+                        return@setOnClickListener
+                    }
+                    if (city.isBlank()) {
+                        etCity.error = "City is required"
+                        return@setOnClickListener
+                    }
+                    if (state.isBlank()) {
+                        etState.error = "State is required"
+                        return@setOnClickListener
+                    }
                 }
 
                 if (email.isBlank()) {
@@ -449,12 +469,12 @@ class MainActivity : ComponentActivity() {
                     etCheckoutName.error = "Full Name is required"
                     hasError = true
                 }
-                if (phone.isBlank()) {
-                    etCheckoutPhone.error = "Phone Number is required"
+                if (phone.length != 10) {
+                    etCheckoutPhone.error = "Enter a valid 10-digit phone number"
                     hasError = true
                 }
-                if (pincode.isBlank()) {
-                    etCheckoutPincode.error = "PIN Code is required"
+                if (pincode.length != 6) {
+                    etCheckoutPincode.error = "PIN Code must be exactly 6 digits"
                     hasError = true
                 }
                 if (street.isBlank()) {
