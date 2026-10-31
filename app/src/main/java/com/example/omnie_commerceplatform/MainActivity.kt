@@ -7,13 +7,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.omnie_commerceplatform.adapters.CartAdapter
 import com.example.omnie_commerceplatform.adapters.CategoryAdapter
+import com.example.omnie_commerceplatform.adapters.DepartmentCategory
+import com.example.omnie_commerceplatform.adapters.ExploreAdapter
 import com.example.omnie_commerceplatform.adapters.OrderAdapter
 import com.example.omnie_commerceplatform.adapters.ProductAdapter
 import com.example.omnie_commerceplatform.adapters.RecommendedAdapter
@@ -23,6 +25,7 @@ import com.example.omnie_commerceplatform.data.PincodeLookup
 import com.example.omnie_commerceplatform.databinding.ActivityMainBinding
 import com.example.omnie_commerceplatform.databinding.DialogCheckoutBinding
 import com.example.omnie_commerceplatform.databinding.FragmentCartBinding
+import com.example.omnie_commerceplatform.databinding.FragmentExploreBinding
 import com.example.omnie_commerceplatform.databinding.FragmentHomeBinding
 import com.example.omnie_commerceplatform.databinding.FragmentProfileBinding
 import com.example.omnie_commerceplatform.databinding.FragmentSignInBinding
@@ -60,7 +63,8 @@ class MainActivity : ComponentActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             currentTab = item.itemId
             when (item.itemId) {
-                R.id.nav_home, R.id.nav_explore -> showHomeScreen()
+                R.id.nav_home -> showHomeScreen()
+                R.id.nav_explore -> showExploreScreen()
                 R.id.nav_cart -> showCartScreen()
                 R.id.nav_profile -> showProfileScreen()
             }
@@ -218,6 +222,62 @@ class MainActivity : ComponentActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.onSearchQueryChanged(s.toString())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        updateCartBadge()
+    }
+
+    private fun showExploreScreen() {
+        val exploreBinding = FragmentExploreBinding.inflate(layoutInflater)
+        binding.fragmentContainer.removeAllViews()
+        binding.fragmentContainer.addView(exploreBinding.root)
+
+        val deptList = OmniData.categories.filter { it != "All products" }.map { cat ->
+            val sample = OmniData.products.find { it.category.equals(cat, ignoreCase = true) } ?: OmniData.products[0]
+            val count = OmniData.products.count { it.category.equals(cat, ignoreCase = true) }
+            DepartmentCategory(cat, "$count Products Available", sample)
+        }
+
+        val exploreAdapter = ExploreAdapter(
+            departments = deptList,
+            onDepartmentClick = { categoryName ->
+                viewModel.onCategorySelected(categoryName)
+                binding.bottomNavigation.selectedItemId = R.id.nav_home
+                showHomeScreen()
+            }
+        )
+
+        val trendingProducts = OmniData.products.filter { it.rating >= 4.8 }
+        val trendingAdapter = ProductAdapter(
+            products = trendingProducts,
+            onAddToCart = { product ->
+                viewModel.addToCart(product)
+                updateCartBadge()
+                com.google.android.material.snackbar.Snackbar.make(
+                    binding.root,
+                    "Added ${product.title} to Cart!",
+                    com.google.android.material.snackbar.Snackbar.LENGTH_LONG
+                ).setAction("VIEW CART") {
+                    binding.bottomNavigation.selectedItemId = R.id.nav_cart
+                    showCartScreen()
+                }.show()
+            }
+        )
+
+        exploreBinding.rvExploreDepartments.layoutManager = GridLayoutManager(this, 2)
+        exploreBinding.rvExploreDepartments.adapter = exploreAdapter
+
+        exploreBinding.rvTrendingProducts.layoutManager = GridLayoutManager(this, 2)
+        exploreBinding.rvTrendingProducts.adapter = trendingAdapter
+
+        exploreBinding.etExploreSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.onSearchQueryChanged(s.toString())
+                binding.bottomNavigation.selectedItemId = R.id.nav_home
+                showHomeScreen()
             }
             override fun afterTextChanged(s: Editable?) {}
         })
