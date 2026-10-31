@@ -162,17 +162,45 @@ class MainActivity : ComponentActivity() {
             }
 
             btnSubmitAuth.setOnClickListener {
-                viewModel.onEmailChange(etEmail.text.toString())
-                viewModel.onPasswordChange(etPassword.text.toString())
+                val email = etEmail.text.toString().trim()
+                val password = etPassword.text.toString().trim()
+                val fullName = etFullName.text.toString().trim()
+                val phone = etPhone.text.toString().trim()
+                val street = etStreet.text.toString().trim()
+                val pincode = etPincode.text.toString().trim()
+                val city = etCity.text.toString().trim()
+                val state = etState.text.toString().trim()
+
                 if (authState.isSignUpMode) {
-                    viewModel.onFullNameChange(etFullName.text.toString())
-                    viewModel.onPhoneChange(etPhone.text.toString())
-                    viewModel.onStreetChange(etStreet.text.toString())
-                    viewModel.onPincodeChange(etPincode.text.toString())
-                    viewModel.onCityChange(etCity.text.toString())
-                    viewModel.onStateChange(etState.text.toString())
+                    if (fullName.isBlank()) {
+                        etFullName.error = "Full Name is required"
+                        return@setOnClickListener
+                    }
                 }
-                viewModel.signIn()
+
+                if (email.isBlank()) {
+                    etEmail.error = "Email address is required"
+                    return@setOnClickListener
+                }
+                if (!email.contains("@") || !email.contains(".")) {
+                    etEmail.error = "Enter a valid email address"
+                    return@setOnClickListener
+                }
+                if (password.length < 6) {
+                    etPassword.error = "Password must be at least 6 characters"
+                    return@setOnClickListener
+                }
+
+                viewModel.submitAuthentication(
+                    fullName = fullName,
+                    email = email,
+                    pass = password,
+                    phone = phone,
+                    street = street,
+                    pincode = pincode,
+                    city = city,
+                    state = state
+                )
             }
         }
     }

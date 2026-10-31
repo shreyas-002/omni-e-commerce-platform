@@ -200,6 +200,49 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun submitAuthentication(
+        fullName: String,
+        email: String,
+        pass: String,
+        phone: String,
+        street: String,
+        pincode: String,
+        city: String,
+        state: String
+    ) {
+        val isSignUp = _authUiState.value.isSignUpMode
+
+        val profileName = if (isSignUp) fullName.ifBlank { "Omni Member" } else repository.userProfile.value.fullName.ifBlank { "Omni Member" }
+        val updatedProfile = UserProfile(
+            fullName = profileName,
+            email = email,
+            phone = phone,
+            address = DeliveryAddress(
+                street = street,
+                city = city,
+                state = state,
+                pincode = pincode
+            )
+        )
+
+        repository.updateUserProfile(updatedProfile)
+
+        _authUiState.update {
+            it.copy(
+                fullName = fullName,
+                email = email,
+                pass = pass,
+                phone = phone,
+                streetAddress = street,
+                pincode = pincode,
+                city = city,
+                state = state,
+                isLoggedIn = true,
+                errorMessage = null
+            )
+        }
+    }
+
     fun signOut() {
         _authUiState.update {
             it.copy(
