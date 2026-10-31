@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.omnie_commerceplatform.R
 import com.example.omnie_commerceplatform.data.CartItem
 import com.example.omnie_commerceplatform.databinding.ItemCartRowBinding
 import java.util.Locale
@@ -27,6 +28,13 @@ class CartAdapter(
             tvCartTitle.text = item.product.title
             tvCartPrice.text = "₹${String.format(Locale.US, "%,d", item.product.priceInRupees)}"
             tvQty.text = item.quantity.toString()
+
+            if (item.quantity == 1) {
+                btnDecrease.setImageResource(R.drawable.ic_trash)
+            } else {
+                btnDecrease.setImageResource(R.drawable.ic_minus)
+            }
+            btnIncrease.setImageResource(R.drawable.ic_plus)
 
             imgCartItem.load(item.product.imageUrl.ifBlank { item.product.drawableRes }) {
                 crossfade(true)

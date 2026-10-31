@@ -20,6 +20,7 @@
             android:id="@+id/imgCartItem"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:contentDescription="Cart Product"
             android:scaleType="centerCrop" />
 
         <LinearLayout
@@ -59,7 +60,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_input_add" />
+                android:contentDescription="Decrease"
+                android:src="@drawable/ic_minus" />
 
             <TextView
                 android:id="@+id/tvQty"
@@ -75,7 +77,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_input_add" />
+                android:contentDescription="Increase"
+                android:src="@drawable/ic_plus" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
