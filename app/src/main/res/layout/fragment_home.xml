@@ -27,9 +27,13 @@
             android:layout_centerVertical="true"
             android:layout_marginHorizontal="12dp"
             android:layout_toEndOf="@id/imgHeaderLogo"
-            android:background="@drawable/ic_launcher_background"
+            android:background="@drawable/bg_search_input"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="8dp"
             android:hint="Search products..."
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="14dp"
+            android:textColor="#1C1D21"
+            android:textColorHint="#8D99AE"
             android:textSize="13sp" />
     </RelativeLayout>
 
