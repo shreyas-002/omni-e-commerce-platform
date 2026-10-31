@@ -224,9 +224,29 @@ class MainActivity : ComponentActivity() {
 
         val shopState = viewModel.shopUiState.value
         val totalPrice = shopState.cartItems.sumOf { it.product.priceInRupees * it.quantity }
+        val isCartEmpty = shopState.cartItems.isEmpty()
 
-        cartBinding.tvCartMrp.text = "₹${String.format(Locale.US, "%,d", totalPrice)}"
-        cartBinding.tvCartTotalPayable.text = "₹${String.format(Locale.US, "%,d", totalPrice)}"
+        if (isCartEmpty) {
+            cartBinding.layoutEmptyCart.visibility = View.VISIBLE
+            cartBinding.cardPriceDetails.visibility = View.GONE
+            cartBinding.bottomCheckoutBar.visibility = View.GONE
+            cartBinding.rvCartItems.visibility = View.GONE
+            cartBinding.tvCartHeader.text = "YOUR CART IS EMPTY"
+
+            cartBinding.btnExploreStore.setOnClickListener {
+                binding.bottomNavigation.selectedItemId = R.id.nav_home
+                showHomeScreen()
+            }
+        } else {
+            cartBinding.layoutEmptyCart.visibility = View.GONE
+            cartBinding.cardPriceDetails.visibility = View.VISIBLE
+            cartBinding.bottomCheckoutBar.visibility = View.VISIBLE
+            cartBinding.rvCartItems.visibility = View.VISIBLE
+            cartBinding.tvCartHeader.text = "MY SHOPPING CART (${shopState.cartItems.sumOf { it.quantity }} items)"
+
+            cartBinding.tvCartMrp.text = "₹${String.format(Locale.US, "%,d", totalPrice)}"
+            cartBinding.tvCartTotalPayable.text = "₹${String.format(Locale.US, "%,d", totalPrice)}"
+        }
 
         val cartAdapter = CartAdapter(
             items = shopState.cartItems,
@@ -257,7 +277,11 @@ class MainActivity : ComponentActivity() {
         cartBinding.rvRecommended.adapter = recAdapter
 
         cartBinding.btnProceedCheckout.setOnClickListener {
-            showCheckoutDialog()
+            if (shopState.cartItems.isEmpty()) {
+                Toast.makeText(this, "Your cart is empty. Add items to checkout.", Toast.LENGTH_SHORT).show()
+            } else {
+                showCheckoutDialog()
+            }
         }
     }
 
