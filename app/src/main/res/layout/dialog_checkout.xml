@@ -32,7 +32,7 @@
                 android:id="@+id/etCheckoutName"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:hint="Full Name"
+                android:hint="Full Name *"
                 android:inputType="textPersonName" />
 
             <EditText
@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
-                android:hint="Phone Number"
+                android:hint="Phone Number *"
                 android:inputType="phone" />
 
             <EditText
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
-                android:hint="PIN Code"
+                android:hint="PIN Code *"
                 android:inputType="number" />
 
             <EditText
@@ -56,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="10dp"
-                android:hint="Street Address"
+                android:hint="Street Address / Building / Area *"
                 android:inputType="textPostalAddress" />
 
             <LinearLayout
@@ -70,14 +70,14 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:hint="City" />
+                    android:hint="City *" />
 
                 <EditText
                     android:id="@+id/etCheckoutState"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:hint="State" />
+                    android:hint="State *" />
             </LinearLayout>
 
             <Button

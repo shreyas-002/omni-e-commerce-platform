@@ -408,9 +408,47 @@ class MainActivity : ComponentActivity() {
             })
 
             btnToPayment.setOnClickListener {
-                layoutStepAddress.visibility = View.GONE
-                layoutStepPayment.visibility = View.VISIBLE
-                tvCheckoutStepTitle.text = "Select Payment Method"
+                val name = etCheckoutName.text.toString().trim()
+                val phone = etCheckoutPhone.text.toString().trim()
+                val pincode = etCheckoutPincode.text.toString().trim()
+                val street = etCheckoutStreet.text.toString().trim()
+                val city = etCheckoutCity.text.toString().trim()
+                val state = etCheckoutState.text.toString().trim()
+
+                var hasError = false
+
+                if (name.isBlank()) {
+                    etCheckoutName.error = "Full Name is required"
+                    hasError = true
+                }
+                if (phone.isBlank()) {
+                    etCheckoutPhone.error = "Phone Number is required"
+                    hasError = true
+                }
+                if (pincode.isBlank()) {
+                    etCheckoutPincode.error = "PIN Code is required"
+                    hasError = true
+                }
+                if (street.isBlank()) {
+                    etCheckoutStreet.error = "Street Address is required"
+                    hasError = true
+                }
+                if (city.isBlank()) {
+                    etCheckoutCity.error = "City is required"
+                    hasError = true
+                }
+                if (state.isBlank()) {
+                    etCheckoutState.error = "State is required"
+                    hasError = true
+                }
+
+                if (hasError) {
+                    Toast.makeText(this@MainActivity, "Please fill in all required fields marked with *", Toast.LENGTH_SHORT).show()
+                } else {
+                    layoutStepAddress.visibility = View.GONE
+                    layoutStepPayment.visibility = View.VISIBLE
+                    tvCheckoutStepTitle.text = "Select Payment Method"
+                }
             }
 
             btnConfirmOrder.setOnClickListener {
