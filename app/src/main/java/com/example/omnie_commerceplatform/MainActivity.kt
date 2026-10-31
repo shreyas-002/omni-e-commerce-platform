@@ -182,8 +182,15 @@ class MainActivity : ComponentActivity() {
             products = viewModel.filteredProductsFlow.value,
             onAddToCart = { product ->
                 viewModel.addToCart(product)
-                Toast.makeText(this, "Added ${product.title} to Cart!", Toast.LENGTH_SHORT).show()
                 updateCartBadge()
+                com.google.android.material.snackbar.Snackbar.make(
+                    binding.root,
+                    "Added ${product.title} to Cart!",
+                    com.google.android.material.snackbar.Snackbar.LENGTH_LONG
+                ).setAction("VIEW CART") {
+                    binding.bottomNavigation.selectedItemId = R.id.nav_cart
+                    showCartScreen()
+                }.show()
             }
         )
 

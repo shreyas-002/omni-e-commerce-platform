@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.omnie_commerceplatform.R
 import com.example.omnie_commerceplatform.databinding.ItemCategoryPillBinding
 
 class CategoryAdapter(
@@ -24,7 +25,14 @@ class CategoryAdapter(
         val isSelected = category == selectedCategory
 
         holder.binding.tvCategoryName.text = category
-        holder.binding.tvCategoryName.setTextColor(if (isSelected) Color.WHITE else Color.parseColor("#1C1D21"))
+        if (isSelected) {
+            holder.binding.tvCategoryName.setBackgroundResource(R.drawable.bg_category_pill_selected)
+            holder.binding.tvCategoryName.setTextColor(Color.WHITE)
+        } else {
+            holder.binding.tvCategoryName.setBackgroundResource(R.drawable.bg_category_pill_unselected)
+            holder.binding.tvCategoryName.setTextColor(Color.parseColor("#0B132B"))
+        }
+
         holder.binding.root.setOnClickListener {
             selectedCategory = category
             notifyDataSetChanged()
