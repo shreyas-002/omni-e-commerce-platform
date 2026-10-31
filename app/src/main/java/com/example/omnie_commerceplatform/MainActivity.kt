@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
 
         splashBinding.root.postDelayed({
             observeAuthState()
-        }, 2000)
+        }, 1200)
     }
 
     private fun observeAuthState() {
