@@ -212,32 +212,35 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
     ) {
         clearCart()
         val isSignUp = _authUiState.value.isSignUpMode
+        val savedProfile = repository.userProfile.value
 
-        val profileName = if (isSignUp) fullName.ifBlank { "Omni Member" } else repository.userProfile.value.fullName.ifBlank { "Omni Member" }
+        val profileName = if (isSignUp) fullName.ifBlank { "Omni Member" } else savedProfile.fullName.ifBlank { "Omni Member" }
+        val profilePhone = if (isSignUp) phone else savedProfile.phone.ifBlank { phone }
+        val profileAddress = if (isSignUp) {
+            DeliveryAddress(street = street, city = city, state = state, pincode = pincode)
+        } else {
+            savedProfile.address
+        }
+
         val updatedProfile = UserProfile(
             fullName = profileName,
             email = email,
-            phone = phone,
-            address = DeliveryAddress(
-                street = street,
-                city = city,
-                state = state,
-                pincode = pincode
-            )
+            phone = profilePhone,
+            address = profileAddress
         )
 
         repository.updateUserProfile(updatedProfile)
 
         _authUiState.update {
             it.copy(
-                fullName = fullName,
+                fullName = profileName,
                 email = email,
                 pass = pass,
-                phone = phone,
-                streetAddress = street,
-                pincode = pincode,
-                city = city,
-                state = state,
+                phone = profilePhone,
+                streetAddress = profileAddress.street,
+                pincode = profileAddress.pincode,
+                city = profileAddress.city,
+                state = profileAddress.state,
                 isLoggedIn = true,
                 errorMessage = null
             )
