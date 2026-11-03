@@ -426,6 +426,7 @@ class MainActivity : ComponentActivity() {
 
             btnSignOut.setOnClickListener {
                 viewModel.signOut()
+                observeAuthState()
             }
         }
     }
