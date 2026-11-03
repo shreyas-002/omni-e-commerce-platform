@@ -102,6 +102,55 @@
                 android:orientation="horizontal"
                 android:padding="12dp" />
 
+            <!-- No Search Results View -->
+            <LinearLayout
+                android:id="@+id/layoutNoResults"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:contentDescription="No Results"
+                    android:src="@android:drawable/ic_menu_search"
+                    app:tint="#8D99AE" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="No Matching Products Found"
+                    android:textColor="#0B132B"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvNoResultsSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="Try searching for 'headphones', 'watch', or 'speaker'."
+                    android:textColor="#6C757D"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnResetSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="#0B132B"
+                    android:text="Clear Search"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+
             <!-- Product Grid RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvProducts"

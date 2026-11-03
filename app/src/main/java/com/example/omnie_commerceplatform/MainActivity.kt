@@ -262,10 +262,25 @@ class MainActivity : ComponentActivity() {
         homeBinding.rvProducts.adapter = productAdapter
 
         lifecycleScope.launch {
-            viewModel.shopUiState.collectLatest { shopState ->
-                val cartIds = shopState.cartItems.map { it.product.id }.toSet()
-                productAdapter.submitList(viewModel.filteredProductsFlow.value, cartIds)
+            viewModel.filteredProductsFlow.collectLatest { list ->
+                val cartIds = viewModel.shopUiState.value.cartItems.map { it.product.id }.toSet()
+                productAdapter.submitList(list, cartIds)
+
+                if (list.isEmpty()) {
+                    homeBinding.layoutNoResults.visibility = View.VISIBLE
+                    homeBinding.rvProducts.visibility = View.GONE
+                    val q = viewModel.shopUiState.value.searchQuery
+                    homeBinding.tvNoResultsSubtitle.text = "No products matched '$q'. Try 'headphones', 'watch', or 'speaker'."
+                } else {
+                    homeBinding.layoutNoResults.visibility = View.GONE
+                    homeBinding.rvProducts.visibility = View.VISIBLE
+                }
             }
+        }
+
+        homeBinding.btnResetSearch.setOnClickListener {
+            homeBinding.etSearch.setText("")
+            viewModel.onSearchQueryChanged("")
         }
 
         homeBinding.etSearch.addTextChangedListener(object : TextWatcher {
@@ -328,9 +343,14 @@ class MainActivity : ComponentActivity() {
         exploreBinding.etExploreSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onSearchQueryChanged(s.toString())
-                binding.bottomNavigation.selectedItemId = R.id.nav_home
-                showHomeScreen()
+                val query = s.toString().trim()
+                viewModel.onSearchQueryChanged(query)
+                val filteredTrending = OmniData.products.filter { prod ->
+                    (query.isBlank() && prod.rating >= 4.8) ||
+                    (query.isNotBlank() && (prod.title.contains(query, ignoreCase = true) || prod.category.contains(query, ignoreCase = true)))
+                }
+                val cartIds = viewModel.shopUiState.value.cartItems.map { it.product.id }.toSet()
+                trendingAdapter.submitList(filteredTrending, cartIds)
             }
             override fun afterTextChanged(s: Editable?) {}
         })
