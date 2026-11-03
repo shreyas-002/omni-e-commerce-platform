@@ -43,6 +43,8 @@ class MainActivity : ComponentActivity() {
 
     private var currentTab = R.id.nav_home
 
+    private var isSplashDone = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,23 +80,22 @@ class MainActivity : ComponentActivity() {
         binding.fragmentContainer.removeAllViews()
         binding.fragmentContainer.addView(splashBinding.root)
 
-        splashBinding.root.postDelayed({
+        binding.root.postDelayed({
+            isSplashDone = true
             observeAuthState()
         }, 1200)
     }
 
     private fun observeAuthState() {
-        lifecycleScope.launch {
-            viewModel.authUiState.collectLatest { authState ->
-                if (!authState.isLoggedIn) {
-                    binding.bottomNavigation.visibility = View.GONE
-                    showSignInScreen()
-                } else {
-                    binding.bottomNavigation.visibility = View.VISIBLE
-                    binding.bottomNavigation.selectedItemId = R.id.nav_home
-                    showHomeScreen()
-                }
-            }
+        if (!isSplashDone) return
+        val authState = viewModel.authUiState.value
+        if (!authState.isLoggedIn) {
+            binding.bottomNavigation.visibility = View.GONE
+            showSignInScreen()
+        } else {
+            binding.bottomNavigation.visibility = View.VISIBLE
+            binding.bottomNavigation.selectedItemId = R.id.nav_home
+            showHomeScreen()
         }
     }
 
