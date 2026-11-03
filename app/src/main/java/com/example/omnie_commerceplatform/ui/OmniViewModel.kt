@@ -210,6 +210,7 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
         city: String,
         state: String
     ) {
+        clearCart()
         val isSignUp = _authUiState.value.isSignUpMode
 
         val profileName = if (isSignUp) fullName.ifBlank { "Omni Member" } else repository.userProfile.value.fullName.ifBlank { "Omni Member" }
@@ -244,6 +245,7 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun signOut() {
+        clearCart()
         _authUiState.update {
             it.copy(
                 isLoggedIn = false,
