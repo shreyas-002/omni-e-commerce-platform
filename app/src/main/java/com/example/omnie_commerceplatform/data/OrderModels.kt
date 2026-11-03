@@ -24,6 +24,12 @@ data class UserProfile(
     val address: DeliveryAddress = DeliveryAddress()
 )
 
+data class UserAccount(
+    val email: String,
+    val pass: String,
+    val profile: UserProfile
+)
+
 data class Order(
     val orderId: String,
     val items: List<CartItem>,

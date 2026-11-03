@@ -200,6 +200,12 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    enum class AuthResult {
+        SUCCESS,
+        ACCOUNT_NOT_FOUND,
+        WRONG_PASSWORD
+    }
+
     fun submitAuthentication(
         fullName: String,
         email: String,
@@ -209,41 +215,63 @@ class OmniViewModel(application: Application) : AndroidViewModel(application) {
         pincode: String,
         city: String,
         state: String
-    ) {
+    ): AuthResult {
         clearCart()
         val isSignUp = _authUiState.value.isSignUpMode
-        val savedProfile = repository.userProfile.value
 
-        val profileName = if (isSignUp) fullName.ifBlank { "Omni Member" } else savedProfile.fullName.ifBlank { "Omni Member" }
-        val profilePhone = if (isSignUp) phone else savedProfile.phone.ifBlank { phone }
-        val profileAddress = if (isSignUp) {
-            DeliveryAddress(street = street, city = city, state = state, pincode = pincode)
+        if (!isSignUp) {
+            val profile = repository.verifyCredentials(email, pass)
+            if (profile == null) {
+                if (!repository.isEmailRegistered(email)) {
+                    _authUiState.update { it.copy(errorMessage = "ACCOUNT_NOT_FOUND") }
+                    return AuthResult.ACCOUNT_NOT_FOUND
+                } else {
+                    _authUiState.update { it.copy(errorMessage = "WRONG_PASSWORD") }
+                    return AuthResult.WRONG_PASSWORD
+                }
+            } else {
+                repository.updateUserProfile(profile)
+                _authUiState.update {
+                    it.copy(
+                        fullName = profile.fullName,
+                        email = profile.email,
+                        pass = pass,
+                        phone = profile.phone,
+                        streetAddress = profile.address.street,
+                        pincode = profile.address.pincode,
+                        city = profile.address.city,
+                        state = profile.address.state,
+                        isLoggedIn = true,
+                        errorMessage = null
+                    )
+                }
+                return AuthResult.SUCCESS
+            }
         } else {
-            savedProfile.address
-        }
-
-        val updatedProfile = UserProfile(
-            fullName = profileName,
-            email = email,
-            phone = profilePhone,
-            address = profileAddress
-        )
-
-        repository.updateUserProfile(updatedProfile)
-
-        _authUiState.update {
-            it.copy(
+            val profileName = fullName.ifBlank { "Omni Member" }
+            val newProfile = UserProfile(
                 fullName = profileName,
                 email = email,
-                pass = pass,
-                phone = profilePhone,
-                streetAddress = profileAddress.street,
-                pincode = profileAddress.pincode,
-                city = profileAddress.city,
-                state = profileAddress.state,
-                isLoggedIn = true,
-                errorMessage = null
+                phone = phone,
+                address = DeliveryAddress(street, city, state, pincode)
             )
+            repository.registerAccount(newProfile, pass)
+
+            _authUiState.update {
+                it.copy(
+                    fullName = profileName,
+                    email = email,
+                    pass = pass,
+                    phone = phone,
+                    streetAddress = street,
+                    pincode = pincode,
+                    city = city,
+                    state = state,
+                    isLoggedIn = true,
+                    errorMessage = null
+                )
+            }
+            return AuthResult.SUCCESS
         }
     }
 

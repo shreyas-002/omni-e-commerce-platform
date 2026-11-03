@@ -13,18 +13,71 @@ import java.util.Locale
 import java.util.Random
 
 /**
- * Local Database Repository maintaining registered user profiles, delivery locations,
+ * Local Database Repository maintaining registered user accounts, profiles, delivery locations,
  * and order history across app restarts.
  */
 class OmniRepository(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences("omni_db_prefs", Context.MODE_PRIVATE)
 
+    private val registeredAccounts = mutableListOf(
+        UserAccount(
+            email = "demo@omni.com",
+            pass = "OmniDemo123",
+            profile = UserProfile(
+                fullName = "Demo Member",
+                email = "demo@omni.com",
+                phone = "9876543210",
+                address = DeliveryAddress("42 Innovation Park, MG Road", "Bengaluru", "Karnataka", "560001")
+            )
+        ),
+        UserAccount(
+            email = "shopper@omni.com",
+            pass = "Shopper123",
+            profile = UserProfile(
+                fullName = "Shopper Account",
+                email = "shopper@omni.com",
+                phone = "9876543211",
+                address = DeliveryAddress("12 Connaught Place", "New Delhi", "Delhi", "110001")
+            )
+        ),
+        UserAccount(
+            email = "test@omni.com",
+            pass = "TestOmni123",
+            profile = UserProfile(
+                fullName = "Test Account",
+                email = "test@omni.com",
+                phone = "9876543212",
+                address = DeliveryAddress("88 Marine Drive", "Mumbai", "Maharashtra", "400001")
+            )
+        )
+    )
+
     private val _userProfile = MutableStateFlow(loadUserProfile())
     val userProfile: StateFlow<UserProfile> = _userProfile.asStateFlow()
 
     private val _ordersList = MutableStateFlow(loadOrders())
     val ordersList: StateFlow<List<Order>> = _ordersList.asStateFlow()
+
+    fun isEmailRegistered(email: String): Boolean {
+        val clean = email.trim().lowercase()
+        return registeredAccounts.any { it.email.lowercase() == clean }
+    }
+
+    fun verifyCredentials(email: String, pass: String): UserProfile? {
+        val cleanEmail = email.trim().lowercase()
+        val account = registeredAccounts.find { it.email.lowercase() == cleanEmail && it.pass == pass }
+        return account?.profile
+    }
+
+    fun registerAccount(profile: UserProfile, pass: String): UserProfile {
+        val cleanEmail = profile.email.trim().lowercase()
+        registeredAccounts.removeAll { it.email.lowercase() == cleanEmail }
+        val newAccount = UserAccount(email = cleanEmail, pass = pass, profile = profile)
+        registeredAccounts.add(newAccount)
+        updateUserProfile(profile)
+        return profile
+    }
 
     fun updateUserProfile(profile: UserProfile) {
         _userProfile.update { profile }
@@ -51,9 +104,9 @@ class OmniRepository(context: Context) {
     }
 
     private fun loadUserProfile(): UserProfile {
-        val name = prefs.getString("key_name", "John Doe") ?: "John Doe"
+        val name = prefs.getString("key_name", "Demo Member") ?: "Demo Member"
         val email = prefs.getString("key_email", "demo@omni.com") ?: "demo@omni.com"
-        val phone = prefs.getString("key_phone", "+91 98765 43210") ?: "+91 98765 43210"
+        val phone = prefs.getString("key_phone", "9876543210") ?: "9876543210"
         val street = prefs.getString("key_street", "42 Innovation Park, MG Road") ?: "42 Innovation Park, MG Road"
         val city = prefs.getString("key_city", "Bengaluru") ?: "Bengaluru"
         val state = prefs.getString("key_state", "Karnataka") ?: "Karnataka"
@@ -69,7 +122,6 @@ class OmniRepository(context: Context) {
     }
 
     private fun saveOrdersToPrefs(orders: List<Order>) {
-        // Store simple serialized representation of orders count
         prefs.edit().putInt("key_orders_count", orders.size).apply()
     }
 

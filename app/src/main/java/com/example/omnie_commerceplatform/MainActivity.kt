@@ -207,7 +207,7 @@ class MainActivity : ComponentActivity() {
                     return@setOnClickListener
                 }
 
-                viewModel.submitAuthentication(
+                val authResult = viewModel.submitAuthentication(
                     fullName = fullName,
                     email = email,
                     pass = password,
@@ -217,7 +217,20 @@ class MainActivity : ComponentActivity() {
                     city = city,
                     state = state
                 )
-                observeAuthState()
+
+                when (authResult) {
+                    OmniViewModel.AuthResult.ACCOUNT_NOT_FOUND -> {
+                        etEmail.error = "Account not found. Please tap 'Create Account' to register."
+                        Toast.makeText(this@MainActivity, "Account not found. Please tap 'Create Account' to register.", Toast.LENGTH_SHORT).show()
+                    }
+                    OmniViewModel.AuthResult.WRONG_PASSWORD -> {
+                        etPassword.error = "Incorrect password. Please try again."
+                        Toast.makeText(this@MainActivity, "Incorrect password. Please try again.", Toast.LENGTH_SHORT).show()
+                    }
+                    OmniViewModel.AuthResult.SUCCESS -> {
+                        observeAuthState()
+                    }
+                }
             }
         }
     }
