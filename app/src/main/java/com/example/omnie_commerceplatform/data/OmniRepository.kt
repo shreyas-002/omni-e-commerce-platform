@@ -76,6 +76,7 @@ class OmniRepository(context: Context) {
         val newAccount = UserAccount(email = cleanEmail, pass = pass, profile = profile)
         registeredAccounts.add(newAccount)
         updateUserProfile(profile)
+        _ordersList.update { emptyList() }
         return profile
     }
 
