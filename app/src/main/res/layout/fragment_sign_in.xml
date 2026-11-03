@@ -152,7 +152,7 @@
                     android:layout_marginVertical="16dp"
                     android:background="#E2E8F0" />
 
-                <!-- Quick Demo Accounts Container -->
+                <!-- Quick Demo Account Container -->
                 <LinearLayout
                     android:id="@+id/layoutDemoAccounts"
                     android:layout_width="match_parent"
@@ -178,25 +178,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:text="3 ACCOUNTS"
+                            android:text="1 DEMO ACCOUNT"
                             android:textColor="#E63946"
                             android:textSize="10sp"
                             android:textStyle="bold" />
                     </RelativeLayout>
 
-                    <!-- Demo Account 1 -->
+                    <!-- Single Demo Account -->
                     <include
                         android:id="@+id/demoAccount1"
-                        layout="@layout/item_demo_account" />
-
-                    <!-- Demo Account 2 -->
-                    <include
-                        android:id="@+id/demoAccount2"
-                        layout="@layout/item_demo_account" />
-
-                    <!-- Demo Account 3 -->
-                    <include
-                        android:id="@+id/demoAccount3"
                         layout="@layout/item_demo_account" />
                 </LinearLayout>
             </LinearLayout>

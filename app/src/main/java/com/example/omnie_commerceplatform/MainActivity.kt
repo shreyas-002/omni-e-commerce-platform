@@ -139,26 +139,21 @@ class MainActivity : ComponentActivity() {
             })
 
             val demoList = OmniData.demoAccounts
-            if (demoList.size >= 3) {
+            if (demoList.isNotEmpty()) {
                 demoAccount1.tvDemoLabel.text = demoList[0].label
                 demoAccount1.tvDemoEmail.text = demoList[0].email
                 demoAccount1.layoutDemoItem.setOnClickListener {
-                    viewModel.selectDemoAccount(demoList[0])
-                    viewModel.signIn()
-                }
-
-                demoAccount2.tvDemoLabel.text = demoList[1].label
-                demoAccount2.tvDemoEmail.text = demoList[1].email
-                demoAccount2.layoutDemoItem.setOnClickListener {
-                    viewModel.selectDemoAccount(demoList[1])
-                    viewModel.signIn()
-                }
-
-                demoAccount3.tvDemoLabel.text = demoList[2].label
-                demoAccount3.tvDemoEmail.text = demoList[2].email
-                demoAccount3.layoutDemoItem.setOnClickListener {
-                    viewModel.selectDemoAccount(demoList[2])
-                    viewModel.signIn()
+                    viewModel.submitAuthentication(
+                        fullName = "Demo Member",
+                        email = demoList[0].email,
+                        pass = demoList[0].pass,
+                        phone = "9876543210",
+                        street = "123 High Street",
+                        pincode = "560001",
+                        city = "Bengaluru",
+                        state = "Karnataka"
+                    )
+                    observeAuthState()
                 }
             }
 
@@ -222,6 +217,7 @@ class MainActivity : ComponentActivity() {
                     city = city,
                     state = state
                 )
+                observeAuthState()
             }
         }
     }
