@@ -345,12 +345,25 @@ class MainActivity : ComponentActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val query = s.toString().trim()
                 viewModel.onSearchQueryChanged(query)
+
+                val filteredDepts = deptList.filter { dept ->
+                    query.isBlank() || dept.name.contains(query, ignoreCase = true)
+                }
+                exploreAdapter.submitList(filteredDepts)
+
                 val filteredTrending = OmniData.products.filter { prod ->
                     (query.isBlank() && prod.rating >= 4.8) ||
                     (query.isNotBlank() && (prod.title.contains(query, ignoreCase = true) || prod.category.contains(query, ignoreCase = true)))
                 }
                 val cartIds = viewModel.shopUiState.value.cartItems.map { it.product.id }.toSet()
                 trendingAdapter.submitList(filteredTrending, cartIds)
+
+                if (filteredDepts.isEmpty() && filteredTrending.isEmpty()) {
+                    exploreBinding.layoutExploreNoResults.visibility = View.VISIBLE
+                    exploreBinding.tvExploreNoResultsSubtitle.text = "No departments or trends matched '$query'."
+                } else {
+                    exploreBinding.layoutExploreNoResults.visibility = View.GONE
+                }
             }
             override fun afterTextChanged(s: Editable?) {}
         })
@@ -375,8 +388,8 @@ class MainActivity : ComponentActivity() {
             cartBinding.tvCartHeader.text = "YOUR CART IS EMPTY"
 
             cartBinding.btnExploreStore.setOnClickListener {
-                binding.bottomNavigation.selectedItemId = R.id.nav_home
-                showHomeScreen()
+                binding.bottomNavigation.selectedItemId = R.id.nav_explore
+                showExploreScreen()
             }
         } else {
             cartBinding.layoutEmptyCart.visibility = View.GONE

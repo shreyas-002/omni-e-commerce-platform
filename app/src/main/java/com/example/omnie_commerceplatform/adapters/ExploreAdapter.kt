@@ -14,7 +14,7 @@ data class DepartmentCategory(
 )
 
 class ExploreAdapter(
-    private val departments: List<DepartmentCategory>,
+    private var departments: List<DepartmentCategory>,
     private val onDepartmentClick: (String) -> Unit
 ) : RecyclerView.Adapter<ExploreAdapter.ExploreViewHolder>() {
 
@@ -45,4 +45,9 @@ class ExploreAdapter(
     }
 
     override fun getItemCount(): Int = departments.size
+
+    fun submitList(newList: List<DepartmentCategory>) {
+        departments = newList
+        notifyDataSetChanged()
+    }
 }
