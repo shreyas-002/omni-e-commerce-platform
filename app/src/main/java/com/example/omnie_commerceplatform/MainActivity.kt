@@ -351,16 +351,32 @@ class MainActivity : ComponentActivity() {
                 }
                 exploreAdapter.submitList(filteredDepts)
 
+                if (filteredDepts.isEmpty() && query.isNotBlank()) {
+                    exploreBinding.rvExploreDepartments.visibility = View.GONE
+                } else {
+                    exploreBinding.rvExploreDepartments.visibility = View.VISIBLE
+                }
+
                 val filteredTrending = OmniData.products.filter { prod ->
                     (query.isBlank() && prod.rating >= 4.8) ||
-                    (query.isNotBlank() && (prod.title.contains(query, ignoreCase = true) || prod.category.contains(query, ignoreCase = true)))
+                    (query.isNotBlank() && (
+                        prod.title.contains(query, ignoreCase = true) ||
+                        prod.category.contains(query, ignoreCase = true) ||
+                        prod.brandTagline.contains(query, ignoreCase = true)
+                    ))
                 }
                 val cartIds = viewModel.shopUiState.value.cartItems.map { it.product.id }.toSet()
                 trendingAdapter.submitList(filteredTrending, cartIds)
 
+                if (filteredTrending.isEmpty()) {
+                    exploreBinding.rvTrendingProducts.visibility = View.GONE
+                } else {
+                    exploreBinding.rvTrendingProducts.visibility = View.VISIBLE
+                }
+
                 if (filteredDepts.isEmpty() && filteredTrending.isEmpty()) {
                     exploreBinding.layoutExploreNoResults.visibility = View.VISIBLE
-                    exploreBinding.tvExploreNoResultsSubtitle.text = "No departments or trends matched '$query'."
+                    exploreBinding.tvExploreNoResultsSubtitle.text = "No departments or products matched '$query'."
                 } else {
                     exploreBinding.layoutExploreNoResults.visibility = View.GONE
                 }
