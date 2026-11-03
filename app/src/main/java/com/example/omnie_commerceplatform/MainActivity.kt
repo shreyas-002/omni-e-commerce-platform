@@ -235,10 +235,14 @@ class MainActivity : ComponentActivity() {
             }
         )
 
+        val activeCartIds = viewModel.shopUiState.value.cartItems.map { it.product.id }.toSet()
+
         val productAdapter = ProductAdapter(
             products = viewModel.filteredProductsFlow.value,
+            cartProductIds = activeCartIds,
             onAddToCart = { product ->
                 viewModel.addToCart(product)
+                showHomeScreen()
                 updateCartBadge()
                 com.google.android.material.snackbar.Snackbar.make(
                     binding.root,
@@ -258,8 +262,9 @@ class MainActivity : ComponentActivity() {
         homeBinding.rvProducts.adapter = productAdapter
 
         lifecycleScope.launch {
-            viewModel.filteredProductsFlow.collectLatest { list ->
-                productAdapter.submitList(list)
+            viewModel.shopUiState.collectLatest { shopState ->
+                val cartIds = shopState.cartItems.map { it.product.id }.toSet()
+                productAdapter.submitList(viewModel.filteredProductsFlow.value, cartIds)
             }
         }
 
@@ -294,11 +299,14 @@ class MainActivity : ComponentActivity() {
             }
         )
 
+        val activeCartIds = viewModel.shopUiState.value.cartItems.map { it.product.id }.toSet()
         val trendingProducts = OmniData.products.filter { it.rating >= 4.8 }
         val trendingAdapter = ProductAdapter(
             products = trendingProducts,
+            cartProductIds = activeCartIds,
             onAddToCart = { product ->
                 viewModel.addToCart(product)
+                showExploreScreen()
                 updateCartBadge()
                 com.google.android.material.snackbar.Snackbar.make(
                     binding.root,
